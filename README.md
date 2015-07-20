@@ -47,7 +47,7 @@ $ marketplacecli —v
 
 Upgrading
 =========
-If you have already installed marketplacecli, and you with to upgrade to the latest version, use:
+If you have already installed marketplacecli, and you wish to upgrade to the latest version, use:
 ```
 $ pip install —upgrade marketplacecli
 ```
