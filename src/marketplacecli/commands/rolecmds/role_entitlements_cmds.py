@@ -71,6 +71,7 @@ class RoleEntitlementCmds(Cmd, CoreGlobal):
 
             self.api.Orgs(org.dbId).Roles().Update(new_role)
             printer.out("Role [" + do_args.name + "] updated with new entitlements.")
+            return 0
         except ArgumentParserError as e:
             printer.out("ERROR: In Arguments: " + str(e), printer.ERROR)
             self.help_add()
@@ -129,6 +130,7 @@ class RoleEntitlementCmds(Cmd, CoreGlobal):
 
             self.api.Orgs(org.dbId).Roles().Update(new_role)
             printer.out("Role [" + do_args.name + "] updated with new entitlements.")
+            return 0
         except ArgumentParserError as e:
             printer.out("ERROR: In Arguments: " + str(e), printer.ERROR)
             self.help_remove()
