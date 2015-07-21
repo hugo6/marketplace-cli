@@ -11,7 +11,7 @@ from marketplace.objects.marketplace import *
 
 
 class UserCmds(Cmd, CoreGlobal):
-    """Manage users : list users, update users, update roles"""
+    """Manage users : list users, update users, update roles, enable/disable users"""
 
     cmd_name = "user"
 
@@ -153,3 +153,97 @@ class UserCmds(Cmd, CoreGlobal):
     def help_list(self):
         do_parser = self.arg_list()
         do_parser.print_help()
+
+    def arg_enable(self):
+        doParser = ArgumentParser(prog=self.cmd_name + " enable", add_help=True, description="Enable provided user")
+        mandatory = doParser.add_argument_group("mandatory arguments")
+
+        mandatory.add_argument('--account', dest='account', required=True,
+                               help="user name of the account for which the current command should be executed")
+        return doParser
+
+    def do_enable(self, args):
+        try:
+            doParser = self.arg_enable()
+            doArgs = doParser.parse_args(args.split())
+
+            printer.out("Enabling user [" + doArgs.account + "] ...")
+            user = self.api.Users(doArgs.account).Get()
+            if user is None:
+                printer.out("user " + doArgs.account + "does not exist", printer.ERROR)
+            else:
+                if user.active == True:
+                    printer.out("User [" + doArgs.account + "] is already enabled", printer.ERROR)
+                else:
+                    user.active = True
+                    self.api.Users(doArgs.account).Update(body=user)
+                    printer.out("User [" + doArgs.account + "] is now enabled", printer.OK)
+                if user.active == True:
+                    actived = "X"
+                else:
+                    actived = ""
+                printer.out("Informations about [" + doArgs.account + "] :")
+                table = Texttable(200)
+                table.set_cols_align(["c", "l", "c", "c", "c", "c", "c", "c"])
+                table.header(
+                    ["Login", "Email", "Lastname", "Firstname", "Created", "Active", "Promo Code", "Creation Code"])
+                table.add_row([user.loginName, user.email, user.surname, user.firstName,
+                               user.created.strftime("%Y-%m-%d %H:%M:%S"), actived, user.promoCode, user.creationCode])
+                print table.draw() + "\n"
+            return 0
+        except ArgumentParserError as e:
+            printer.out("In Arguments: " + str(e), printer.ERROR)
+            self.help_enable()
+        except Exception as e:
+            return marketplace_utils.handle_uforge_exception(e)
+
+    def help_enable(self):
+        doParser = self.arg_enable()
+        doParser.print_help()
+
+    def arg_disable(self):
+        doParser = ArgumentParser(prog=self.cmd_name + " disable", add_help=True, description="Disable provided user")
+        mandatory = doParser.add_argument_group("mandatory arguments")
+
+        mandatory.add_argument('--account', dest='account', required=True,
+                               help="user name of the account for which the current command should be executed")
+        return doParser
+
+    def do_disable(self, args):
+        try:
+            doParser = self.arg_disable()
+            doArgs = doParser.parse_args(args.split())
+
+            printer.out("Disabling user [" + doArgs.account + "] ...")
+            user = self.api.Users(doArgs.account).Get()
+            if user is None:
+                printer.out("user " + doArgs.account + "does not exist", printer.ERROR)
+            else:
+                if user.active == False:
+                    printer.out("User [" + doArgs.account + "] is already disabled", printer.ERROR)
+                else:
+                    user.active = False
+                    self.api.Users(doArgs.account).Update(body=user)
+                    printer.out("User [" + doArgs.account + "] is now disabled", printer.OK)
+                if user.active == True:
+                    actived = "X"
+                else:
+                    actived = ""
+                printer.out("Informations about [" + doArgs.account + "] :")
+                table = Texttable(200)
+                table.set_cols_align(["c", "l", "c", "c", "c", "c", "c", "c"])
+                table.header(
+                    ["Login", "Email", "Lastname", "Firstname", "Created", "Active", "Promo Code", "Creation Code"])
+                table.add_row([user.loginName, user.email, user.surname, user.firstName,
+                               user.created.strftime("%Y-%m-%d %H:%M:%S"), actived, user.promoCode, user.creationCode])
+                print table.draw() + "\n"
+            return 0
+        except ArgumentParserError as e:
+            printer.out("In Arguments: " + str(e), printer.ERROR)
+            self.help_disable()
+        except Exception as e:
+            return marketplace_utils.handle_uforge_exception(e)
+
+    def help_disable(self):
+        doParser = self.arg_disable()
+        doParser.print_help()

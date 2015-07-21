@@ -98,6 +98,8 @@ class TestUsers(unittest.TestCase):
     api = Api(url, client=client, headers=headers)
     subscription_profile_name = "subscriptionTest"
     role = "marketplace_vendor"
+    new_login_name = "marketplacecli-test-" + ''.join(
+        random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(5))
 
     def test_01_create(self):
         subscription_profile_cmds = marketplacecli.commands.subscriptionprofilecmds.SubscriptionProfileCmds()
@@ -127,6 +129,17 @@ class TestUsers(unittest.TestCase):
         r = user_cmds.do_list(None)
         self.assertEqual(r, 0)
 
+    def test_user_04_disable(self):
+        user_admin = marketplacecli.commands.usercmds.UserCmds()
+        user_admin.set_globals(self.api, login, password)
+        t = user_admin.do_disable("--account " + self.new_login_name)
+        self.assertEquals(t, 0)
+
+    def test_user_05_enable(self):
+        user_admin = marketplacecli.commands.usercmds.UserCmds()
+        user_admin.set_globals(self.api, login, password)
+        t = user_admin.do_enable("--account " + self.new_login_name)
+        self.assertEquals(t, 0)
 
 class TestEntitlements(unittest.TestCase):
     client = httplib2.Http()
