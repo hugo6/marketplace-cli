@@ -10,6 +10,7 @@ import random
 
 import marketplacecli.commands
 from marketplace.application import Api
+
 if not "TEST_USER" in os.environ or not "TEST_PASSWORD" in os.environ or not "TEST_URL" in os.environ:
     print "Set env varaible [TEST_USER], [TEST_PASSWORD], and [TEST_URL]"
     sys.exit(1)
@@ -110,18 +111,15 @@ class TestUsers(unittest.TestCase):
         self.assertEqual(r, 0)
         user_cmds = marketplacecli.commands.usercmds.UserCmds()
         user_cmds.set_globals(self.api, login, password)
-        new_login_name = "marketplacecli-test-" + ''.join(
-            random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(5))
         r = user_cmds.do_create(
-            "--account " + new_login_name + " --email " + new_login_name + "@company.com --code " + self.subscription_profile_name + " --accountPassword welcome")
+            "--account " + self.new_login_name + " --email " + self.new_login_name + "@company.com --code " + self.subscription_profile_name + " --accountPassword welcome")
         self.assertEqual(r, 0)
 
     def test_02_info(self):
         user_cmds = marketplacecli.commands.usercmds.UserCmds()
         user_cmds.set_globals(self.api, login, password)
-        r, user = user_cmds.do_info(None)
+        r = user_cmds.do_info(None)
         self.assertEqual(r, 0)
-        self.assertEquals(user.loginName, "root")
 
     def test_03_list(self):
         user_cmds = marketplacecli.commands.usercmds.UserCmds()
@@ -172,7 +170,8 @@ class TestRoles(unittest.TestCase):
     headers = {'Authorization': 'Basic ' + base64.encodestring(login + ':' + password)}
 
     api = Api(url, client=client, headers=headers)
-    role = "marketplacecli-tests"
+    role = "marketplacecli-tests-" + ''.join(
+        random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(5))
 
     def test_01_list(self):
         role_cmds = marketplacecli.commands.rolecmds.RoleCmds()
@@ -195,11 +194,12 @@ class TestRoles(unittest.TestCase):
     def test_04_addentitlements(self):
         role_entitlements_cmds = marketplacecli.commands.role_entitlements_cmds.RoleEntitlementCmds()
         role_entitlements_cmds.set_globals(self.api, login, password)
-        r = role_entitlements_cmds.do_add("--name " + self.role + " --entitlements marketplace_vendor marketplace_admin")
+        r = role_entitlements_cmds.do_add(
+            "--name " + self.role + " --entitlements vendor_access products_administrate")
         self.assertEqual(r, 0)
 
     def test_04_removeentitlements(self):
-        role_entitlements_cmds = marketplacecli.commands.role_entitlements_cmds.RoleEntitlementsCmds()
+        role_entitlements_cmds = marketplacecli.commands.role_entitlements_cmds.RoleEntitlementCmds()
         role_entitlements_cmds.set_globals(self.api, login, password)
-        r = role_entitlements_cmds.do_remove("--name " + self.role + " --entitlements marketplace_admin")
+        r = role_entitlements_cmds.do_remove("--name " + self.role + " --entitlements products_administrate")
         self.assertEqual(r, 0)
