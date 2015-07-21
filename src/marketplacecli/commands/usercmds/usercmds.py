@@ -8,6 +8,7 @@ from ussclicore.utils import printer
 from ussclicore.utils import generics_utils
 from marketplacecli.utils import marketplace_utils
 from marketplace.objects.marketplace import *
+from user_admin_cmds import UserAdminCmds
 
 
 class UserCmds(Cmd, CoreGlobal):
@@ -16,7 +17,13 @@ class UserCmds(Cmd, CoreGlobal):
     cmd_name = "user"
 
     def __init__(self):
+        self.subCmds = {}
+        self.generate_sub_commands()
         super(UserCmds, self).__init__()
+
+    def generate_sub_commands(self):
+        user_admin_cmds = UserAdminCmds()
+        self.subCmds[user_admin_cmds.cmd_name] = user_admin_cmds
 
     def arg_info(self):
         do_parser = ArgumentParser(prog=self.cmd_name + " info", add_help=True,

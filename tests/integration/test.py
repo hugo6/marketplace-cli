@@ -141,6 +141,19 @@ class TestUsers(unittest.TestCase):
         t = user_admin.do_enable("--account " + self.new_login_name)
         self.assertEquals(t, 0)
 
+    def test_user_06_admin_promote(self):
+        user_admin = marketplacecli.commands.usercmds.UserAdminCmds()
+        user_admin.set_globals(self.api, login, password)
+        t = user_admin.do_promote("--account " + self.new_login_name)
+        self.assertEquals(t, 0)
+
+    def test_user_07_admin_demote(self):
+        user_admin = marketplacecli.commands.usercmds.UserAdminCmds()
+        user_admin.set_globals(self.api, login, password)
+        t = user_admin.do_demote("--account " + self.new_login_name)
+        self.assertEquals(t, 0)
+
+
 class TestEntitlements(unittest.TestCase):
     client = httplib2.Http()
     headers = {'Authorization': 'Basic ' + base64.encodestring(login + ':' + password)}
