@@ -99,6 +99,7 @@ class TestUsers(unittest.TestCase):
     api = Api(url, client=client, headers=headers)
     subscription_profile_name = "subscriptionTest"
     role = "marketplace_vendor"
+    another_role = "marketplace_consumer"
     new_login_name = "marketplacecli-test-" + ''.join(
         random.SystemRandom().choice(string.ascii_uppercase + string.digits) for _ in range(5))
 
@@ -149,6 +150,24 @@ class TestUsers(unittest.TestCase):
         user_admin = marketplacecli.commands.usercmds.UserAdminCmds()
         user_admin.set_globals(self.api, login, password)
         t = user_admin.do_demote("--account " + self.new_login_name)
+        self.assertEquals(t, 0)
+
+    def test_user_08_role_add(self):
+        user_admin = marketplacecli.commands.usercmds.UserRoleCmds()
+        user_admin.set_globals(self.api, login, password)
+        t = user_admin.do_add("--account " + self.new_login_name + " --roles " + self.another_role)
+        self.assertEquals(t, 0)
+
+    def test_user_09_role_list(self):
+        user_admin = marketplacecli.commands.usercmds.UserRoleCmds()
+        user_admin.set_globals(self.api, login, password)
+        t = user_admin.do_list("--account " + self.new_login_name)
+        self.assertEquals(t, 0)
+
+    def test_user_10_role_remove(self):
+        user_admin = marketplacecli.commands.usercmds.UserRoleCmds()
+        user_admin.set_globals(self.api, login, password)
+        t = user_admin.do_remove("--account " + self.new_login_name + " --roles " + self.another_role)
         self.assertEquals(t, 0)
 
 

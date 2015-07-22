@@ -9,6 +9,7 @@ from ussclicore.utils import generics_utils
 from marketplacecli.utils import marketplace_utils
 from marketplace.objects.marketplace import *
 from user_admin_cmds import UserAdminCmds
+from user_role_cmds import UserRoleCmds
 
 
 class UserCmds(Cmd, CoreGlobal):
@@ -24,6 +25,8 @@ class UserCmds(Cmd, CoreGlobal):
     def generate_sub_commands(self):
         user_admin_cmds = UserAdminCmds()
         self.subCmds[user_admin_cmds.cmd_name] = user_admin_cmds
+        user_role_cmds = UserRoleCmds()
+        self.subCmds[user_role_cmds.cmd_name] = user_role_cmds
 
     def arg_info(self):
         do_parser = ArgumentParser(prog=self.cmd_name + " info", add_help=True,
