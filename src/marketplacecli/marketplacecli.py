@@ -52,44 +52,44 @@ class Mycli(Cmd):
         super(Mycli, self).__init__()
         self.prompt = 'marketplacecli> '
 
-        def do_exit(self, args):
-            return True
+    def do_exit(self, args):
+        return True
 
-        def do_quit(self, args):
-            return True
+    def do_quit(self, args):
+        return True
 
-        def arg_batch(self):
-            do_parser = ArgumentParser("batch", add_help=True,
-                                      description="Execute marketplacecli batch command from a file (for scripting)")
-            mandatory = do_parser.add_argument_group("mandatory arguments")
-            mandatory.add_argument('--file', dest='file', required=True, help="marketplacecli batch file commands")
-            return do_parser
+    def arg_batch(self):
+        do_parser = ArgumentParser("batch", add_help=True,
+                                  description="Execute marketplacecli batch command from a file (for scripting)")
+        mandatory = do_parser.add_argument_group("mandatory arguments")
+        mandatory.add_argument('--file', dest='file', required=True, help="marketplacecli batch file commands")
+        return do_parser
 
-        def do_batch(self, args):
-            try:
-                do_parser = self.arg_batch()
-                try:
-                    do_args = do_parser.parse_args(args.split())
-                except SystemExit as e:
-                    return
-                with open(do_args.file) as f:
-                    for line in f:
-                        try:
-                            self.run_commands_at_invocation([line])
-                        except:
-                            printer.out("bad command '" + line + "'", printer.ERROR)
-                        print "\n"
-
-            except IOError as e:
-                printer.out("File error: " + str(e), printer.ERROR)
-                return
-            except ArgumentParserError as e:
-                printer.out("In Arguments: " + str(e), printer.ERROR)
-                self.help_batch()
-
-        def help_batch(self):
+    def do_batch(self, args):
+        try:
             do_parser = self.arg_batch()
-            do_parser.print_help()
+            try:
+                do_args = do_parser.parse_args(args.split())
+            except SystemExit as e:
+                return
+            with open(do_args.file) as f:
+                for line in f:
+                    try:
+                        self.run_commands_at_invocation([line])
+                    except:
+                        printer.out("bad command '" + line + "'", printer.ERROR)
+                    print "\n"
+
+        except IOError as e:
+            printer.out("File error: " + str(e), printer.ERROR)
+            return
+        except ArgumentParserError as e:
+            printer.out("In Arguments: " + str(e), printer.ERROR)
+            self.help_batch()
+
+    def help_batch(self):
+        do_parser = self.arg_batch()
+        do_parser.print_help()
 
     def cmdloop(self, args):
         if len(args):
