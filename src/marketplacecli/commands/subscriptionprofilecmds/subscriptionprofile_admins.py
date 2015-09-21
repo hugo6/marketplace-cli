@@ -9,7 +9,7 @@ from marketplace.objects.marketplace import users
 from marketplacecli.utils import org_utils
 from marketplacecli.utils import marketplace_utils
 import pyxb
-
+import shlex
 
 class SubscriptionProfileAdmins(Cmd, CoreGlobal):
     """Manage subscription profile admins"""
@@ -36,7 +36,7 @@ class SubscriptionProfileAdmins(Cmd, CoreGlobal):
             # add arguments
             do_parser = self.arg_add()
             try:
-                do_args = do_parser.parse_args(args.split())
+                do_args = do_parser.parse_args(shlex.split(args))
             except SystemExit as e:
                 return
 
@@ -95,7 +95,7 @@ class SubscriptionProfileAdmins(Cmd, CoreGlobal):
             # add arguments
             do_parser = self.arg_remove()
             try:
-                do_args = do_parser.parse_args(args.split())
+                do_args = do_parser.parse_args(shlex.split(args))
             except SystemExit as e:
                 return
 

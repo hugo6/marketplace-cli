@@ -8,8 +8,9 @@ from marketplacecli.utils import org_utils
 from ussclicore.utils import printer
 from ussclicore.utils import generics_utils
 from marketplacecli.utils import marketplace_utils
+from marketplacecli.utils.compare_utils import compare
 import pyxb
-
+import shlex
 
 class RoleEntitlementCmds(Cmd, CoreGlobal):
     """Manage roles entitlements"""
@@ -36,7 +37,7 @@ class RoleEntitlementCmds(Cmd, CoreGlobal):
             # add arguments
             do_parser = self.arg_add()
             try:
-                do_args = do_parser.parse_args(args.split())
+                do_args = do_parser.parse_args(shlex.split(args))
             except SystemExit as e:
                 return
 
@@ -63,6 +64,9 @@ class RoleEntitlementCmds(Cmd, CoreGlobal):
                 already_entitlement = entitlement()
                 already_entitlement.name = r.name
                 new_role.entitlements.append(already_entitlement)
+
+            entitlementsList = self.api.Entitlements.Getall()
+            entitlementsList = compare(entitlementsList.entitlements.entitlement, do_args.entitlements, "name")
 
             for e in do_args.entitlements:
                 new_entitlement = entitlement()
@@ -99,7 +103,7 @@ class RoleEntitlementCmds(Cmd, CoreGlobal):
             # add arguments
             do_parser = self.arg_remove()
             try:
-                do_args = do_parser.parse_args(args.split())
+                do_args = do_parser.parse_args(shlex.split(args))
             except SystemExit as e:
                 return
 
@@ -122,11 +126,19 @@ class RoleEntitlementCmds(Cmd, CoreGlobal):
             new_role.description = old_role.description
             new_role.entitlements = pyxb.BIND()
 
-            for r in old_role.entitlements.entitlement:
-                if r.name not in do_args.entitlements:
-                    already_entitlement = entitlement()
-                    already_entitlement.name = r.name
-                    new_role.entitlements.append(already_entitlement)
+            delete_roles = compare(r.entitlements.entitlement, do_args.entitlements, "name")
+
+            for entitlementItem in r.entitlements.entitlement:
+                    exist = False
+                    for deleterole in delete_roles:
+                            if entitlementItem.name == deleterole.name:
+                                    exist = True
+                    if not exist:
+                            already_entitlement = entitlement()
+                            already_entitlement.name = entitlementItem.name
+                            new_role.entitlements.append(already_entitlement)
+                    else:
+                            printer.out("Removed " + entitlementItem.name + " from role.")
 
             self.api.Orgs(org.dbId).Roles().Update(new_role)
             printer.out("Role [" + do_args.name + "] updated with new entitlements.")

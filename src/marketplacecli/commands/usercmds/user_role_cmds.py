@@ -7,6 +7,7 @@ from marketplace.objects.marketplace import *
 from marketplacecli.utils import org_utils
 from ussclicore.utils import printer
 from marketplacecli.utils import marketplace_utils
+import shlex
 
 
 class UserRoleCmds(Cmd, CoreGlobal):
@@ -33,7 +34,7 @@ class UserRoleCmds(Cmd, CoreGlobal):
             # add arguments
             do_parser = self.arg_list()
             try:
-                do_args = do_parser.parse_args(args.split())
+                do_args = do_parser.parse_args(shlex.split(args))
             except SystemExit as e:
                 return
 
@@ -74,7 +75,7 @@ class UserRoleCmds(Cmd, CoreGlobal):
         try:
             do_parser = self.arg_add()
             try:
-                do_args = do_parser.parse_args(args.split())
+                do_args = do_parser.parse_args(shlex.split(args))
             except SystemExit as e:
                 return
 
@@ -142,7 +143,7 @@ class UserRoleCmds(Cmd, CoreGlobal):
             # add arguments
             do_parser = self.arg_remove()
             try:
-                do_args = do_parser.parse_args(args.split())
+                do_args = do_parser.parse_args(shlex.split(args))
             except SystemExit as e:
                 return
 

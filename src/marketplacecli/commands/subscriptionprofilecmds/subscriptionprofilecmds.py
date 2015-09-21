@@ -11,7 +11,7 @@ from subscriptionprofile_admins import SubscriptionProfileAdmins
 from subscriptionprofile_roles import SubscriptionProfileRoles
 from marketplacecli.utils import marketplace_utils
 import pyxb
-
+import shlex
 
 class SubscriptionProfileCmds(Cmd, CoreGlobal):
     """Manage subscription profiles : list profile, create profiles, update profiles"""
@@ -43,7 +43,7 @@ class SubscriptionProfileCmds(Cmd, CoreGlobal):
             if args:
                 do_parser = self.arg_list()
                 try:
-                    do_args = do_parser.parse_args(args.split())
+                    do_args = do_parser.parse_args(shlex.split(args))
                 except SystemExit as e:
                     return
                 org_name = do_args.org
@@ -87,7 +87,7 @@ class SubscriptionProfileCmds(Cmd, CoreGlobal):
             # add arguments
             do_parser = self.arg_info()
             try:
-                do_args = do_parser.parse_args(args.split())
+                do_args = do_parser.parse_args(shlex.split(args))
             except SystemExit as e:
                 return
 
@@ -153,7 +153,7 @@ class SubscriptionProfileCmds(Cmd, CoreGlobal):
             # add arguments
             do_parser = self.arg_create()
             try:
-                do_args = do_parser.parse_args(args.split())
+                do_args = do_parser.parse_args(shlex.split(args))
             except SystemExit as e:
                 return
 
@@ -224,7 +224,7 @@ class SubscriptionProfileCmds(Cmd, CoreGlobal):
             # add arguments
             do_parser = self.arg_delete()
             try:
-                do_args = do_parser.parse_args(args.split())
+                do_args = do_parser.parse_args(shlex.split(args))
             except SystemExit as e:
                 return
 
@@ -271,7 +271,7 @@ class SubscriptionProfileCmds(Cmd, CoreGlobal):
             # add arguments
             do_parser = self.arg_update()
             try:
-                do_args = do_parser.parse_args(args.split())
+                do_args = do_parser.parse_args(shlex.split(args))
             except SystemExit as e:
                 return
 

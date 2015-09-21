@@ -8,8 +8,9 @@ from marketplacecli.utils import org_utils
 from ussclicore.utils import printer
 from role_entitlements_cmds import RoleEntitlementCmds
 from marketplacecli.utils import marketplace_utils
+from marketplacecli.utils.compare_utils import compare
 import pyxb
-
+import shlex
 
 class RoleCmds(Cmd, CoreGlobal):
     """Manage platform roles"""
@@ -39,7 +40,7 @@ class RoleCmds(Cmd, CoreGlobal):
             if args:
                 do_parser = self.arg_list()
                 try:
-                    do_args = do_parser.parse_args(args.split())
+                    do_args = do_parser.parse_args(shlex.split(args))
                 except SystemExit as e:
                     return
                 org_name = do_args.org
@@ -81,7 +82,7 @@ class RoleCmds(Cmd, CoreGlobal):
             # add arguments
             do_parser = self.arg_info()
             try:
-                do_args = do_parser.parse_args(args.split())
+                do_args = do_parser.parse_args(shlex.split(args))
             except SystemExit as e:
                 return
 
@@ -128,7 +129,7 @@ class RoleCmds(Cmd, CoreGlobal):
         optional = do_parser.add_argument_group("optional arguments")
         optional.add_argument('--description', dest='description', required=False,
                               help="a role description for which the current command should be executed")
-        optional.add_argument('--entitlements', dest='entitlements', required=False,
+        optional.add_argument('--entitlements', dest='entitlements', nargs='+', required=False,
                               help="a list of entitlements to be added to this role during creation (example: --entitlements ent1 ent2 ent3). For a list of available entitlements, run the command: uforge entitlement list --org <org name>")
         optional.add_argument('--org', dest='org', required=False,
                               help="the organization name. If no organization is provided, then the default organization is used.")
@@ -139,7 +140,7 @@ class RoleCmds(Cmd, CoreGlobal):
             # add arguments
             do_parser = self.arg_create()
             try:
-                do_args = do_parser.parse_args(args.split())
+                do_args = do_parser.parse_args(shlex.split(args))
             except SystemExit as e:
                 return
 
@@ -150,8 +151,21 @@ class RoleCmds(Cmd, CoreGlobal):
             new_role.name = do_args.name
             if do_args.description:
                 new_role.description = do_args.description
+            if do_args.entitlements:
+                if do_args.entitlements is not None:
+                    new_role.entitlements = pyxb.BIND()
+                    entList = self.api.Entitlements.Getall()
+                    entList = entList.entitlements.entitlement
+                    entList = compare(entList, do_args.entitlements, "name")
+                    for ent in entList:
+                        add_entitlement = entitlement()
+                        add_entitlement.name = ent.name
+                        add_entitlement.description = ent.description
+                        new_role.entitlements.append(add_entitlement)
+                        printer.out("Entitlement " + ent.name + " added to the role")
 
             self.api.Orgs(org.dbId).Roles().Create(new_role)
+            printer.out("Role [" + new_role.name + "] was correctly created", printer.OK)
             return 0
         except ArgumentParserError as e:
             printer.out("ERROR: In Arguments: " + str(e), printer.ERROR)
@@ -178,7 +192,7 @@ class RoleCmds(Cmd, CoreGlobal):
             # add arguments
             do_parser = self.arg_delete()
             try:
-                do_args = do_parser.parse_args(args.split())
+                do_args = do_parser.parse_args(shlex.split(args))
             except SystemExit as e:
                 return
 
