@@ -26,7 +26,7 @@ class RoleEntitlementCmds(Cmd, CoreGlobal):
         mandatory = do_parser.add_argument_group("mandatory arguments")
         mandatory.add_argument('--name', dest='name', required=True, help="the name of role")
         mandatory.add_argument('--entitlements', dest='entitlements', nargs='+', required=True,
-                               help="the login name to add as a new subscription profile administrator.")
+                               help="the entitlements to the role")
         optional = do_parser.add_argument_group("optional arguments")
         optional.add_argument('--org', dest='org', required=False,
                               help="the organization name. If no organization is provided, then the default organization is used.")

@@ -13,7 +13,7 @@ import pyxb
 import shlex
 
 class RoleCmds(Cmd, CoreGlobal):
-    """Manage platform roles"""
+    """Manage platform roles. This is restricted to administrators."""
 
     cmd_name = "role"
 

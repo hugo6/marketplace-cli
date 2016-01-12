@@ -8,7 +8,7 @@ from marketplacecli.utils import marketplace_utils
 
 
 class EntitlementCmds(Cmd, CoreGlobal):
-    """Manage entitlements: list them all"""
+    """Manage entitlements: list them all. This is restricted to administrators."""
 
     cmd_name = "entitlement"
 

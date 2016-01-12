@@ -31,7 +31,7 @@ class UserCmds(Cmd, CoreGlobal):
 
     def arg_info(self):
         do_parser = ArgumentParser(prog=self.cmd_name + " info", add_help=True,
-                                   description="Displays informations of provided user")
+                                   description="Display informations of provided user")
         return do_parser
 
     def do_info(self, args):
@@ -62,7 +62,7 @@ class UserCmds(Cmd, CoreGlobal):
         do_parser.print_help()
 
     def arg_create(self):
-        do_parser = ArgumentParser(prog=self.cmd_name + " create", add_help=True, description="Creates a new user")
+        do_parser = ArgumentParser(prog=self.cmd_name + " create", add_help=True, description="Create a new user. This is restricted to administrators.")
         mandatory = do_parser.add_argument_group("mandatory arguments")
         mandatory.add_argument('--account', dest='account', required=True, help="the login name of the user to create")
         mandatory.add_argument('--email', dest='email', required=True, help="the email of the user to create")
@@ -166,7 +166,7 @@ class UserCmds(Cmd, CoreGlobal):
         do_parser.print_help()
 
     def arg_enable(self):
-        doParser = ArgumentParser(prog=self.cmd_name + " enable", add_help=True, description="Enable provided user")
+        doParser = ArgumentParser(prog=self.cmd_name + " enable", add_help=True, description="Enable provided user. This is restricted to administrators.")
         mandatory = doParser.add_argument_group("mandatory arguments")
 
         mandatory.add_argument('--account', dest='account', required=True,
@@ -213,7 +213,7 @@ class UserCmds(Cmd, CoreGlobal):
         doParser.print_help()
 
     def arg_disable(self):
-        doParser = ArgumentParser(prog=self.cmd_name + " disable", add_help=True, description="Disable provided user")
+        doParser = ArgumentParser(prog=self.cmd_name + " disable", add_help=True, description="Disable provided user. This is restricted to administrators.")
         mandatory = doParser.add_argument_group("mandatory arguments")
 
         mandatory.add_argument('--account', dest='account', required=True,

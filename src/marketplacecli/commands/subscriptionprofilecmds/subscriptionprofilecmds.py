@@ -14,7 +14,7 @@ import pyxb
 import shlex
 
 class SubscriptionProfileCmds(Cmd, CoreGlobal):
-    """Manage subscription profiles : list profile, create profiles, update profiles"""
+    """Manage subscription profiles : list profile, create profiles, update profiles. This is restricted to administrators."""
 
     cmd_name = "subscription"
 
@@ -129,7 +129,7 @@ class SubscriptionProfileCmds(Cmd, CoreGlobal):
 
     def arg_create(self):
         do_parser = ArgumentParser(prog=self.cmd_name + " create", add_help=True,
-                                   description="Create a new subscription profile within an organization.Create a new subscription profile within an organization.")
+                                   description="Create a new subscription profile within an organization. A subscription profile is mandatory in order to create a user. It must also be activated. By default, the subscription profiles you create are not active.")
         mandatory = do_parser.add_argument_group("mandatory arguments")
         mandatory.add_argument('--name', dest='name', required=True,
                                help="the name of the subscription profile to create")

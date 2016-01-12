@@ -12,7 +12,7 @@ import shlex
 
 
 class VendorCmds(Cmd, CoreGlobal):
-    """Manage vendors : list vendors and more"""
+    """Manage vendors : list vendors."""
 
     cmd_name = "vendor"
 
@@ -21,7 +21,7 @@ class VendorCmds(Cmd, CoreGlobal):
 
     def arg_list(self):
         do_parser = ArgumentParser(prog=self.cmd_name + " list", add_help=True,
-                                   description="List the vendors registered to the marketplace")
+                                   description="List the vendors that are part of the Marketplace. Also indicates whether the vendors are active or not.")
         optional = do_parser.add_argument_group("optional arguments")
         optional.add_argument('--org', dest='org', required=False,
                               help="the organization name. If no organization is provided, then the default organization is used.")
