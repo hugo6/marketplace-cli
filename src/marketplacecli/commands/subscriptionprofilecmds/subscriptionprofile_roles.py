@@ -9,7 +9,7 @@ from marketplace.objects.marketplace import roles
 from marketplacecli.utils import org_utils
 from marketplacecli.utils import marketplace_utils
 import pyxb
-
+import shlex
 
 class SubscriptionProfileRoles(Cmd, CoreGlobal):
     """Manage subscription profile roles"""
@@ -36,7 +36,7 @@ class SubscriptionProfileRoles(Cmd, CoreGlobal):
             # add arguments
             do_parser = self.arg_add()
             try:
-                do_args = do_parser.parse_args(args.split())
+                do_args = do_parser.parse_args(shlex.split(args))
             except SystemExit as e:
                 return
 
@@ -93,7 +93,7 @@ class SubscriptionProfileRoles(Cmd, CoreGlobal):
             # add arguments
             do_parser = self.arg_remove()
             try:
-                do_args = do_parser.parse_args(args.split())
+                do_args = do_parser.parse_args(shlex.split(args))
             except SystemExit as e:
                 return
 

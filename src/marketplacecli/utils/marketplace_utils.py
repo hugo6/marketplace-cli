@@ -30,7 +30,7 @@ def print_uforge_exception(e):
 
 def handle_uforge_exception(e):
     print_uforge_exception(e)
-    return 1
+    return 2
 
 
 def handle_bad_parameters(cmd, e):

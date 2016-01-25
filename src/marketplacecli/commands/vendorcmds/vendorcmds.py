@@ -8,6 +8,7 @@ from ussclicore.utils import printer
 from ussclicore.utils import generics_utils
 from marketplacecli.utils import marketplace_utils
 from marketplace.objects.marketplace import *
+import shlex
 
 
 class VendorCmds(Cmd, CoreGlobal):
@@ -30,7 +31,7 @@ class VendorCmds(Cmd, CoreGlobal):
         try:
             # add arguments
             do_parser = self.arg_list()
-            do_args = do_parser.parse_args(args.split())
+            do_args = do_parser.parse_args(shlex.split(args))
 
             # call UForge API
             printer.out("Getting vendors ...")

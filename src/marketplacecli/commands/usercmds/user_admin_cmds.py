@@ -8,6 +8,7 @@ from marketplacecli.utils import org_utils
 from ussclicore.utils import printer
 from ussclicore.utils import generics_utils
 from marketplacecli.utils import marketplace_utils
+import shlex
 
 
 class UserAdminCmds(Cmd, CoreGlobal):
@@ -33,7 +34,7 @@ class UserAdminCmds(Cmd, CoreGlobal):
     def do_promote(self, args):
         try:
             doParser = self.arg_promote()
-            doArgs = doParser.parse_args(args.split())
+            doArgs = doParser.parse_args(shlex.split(args))
             orgSpecified = org_utils.org_get(api=self.api, name=doArgs.org)
 
             adminUser = self.api.Users(doArgs.account).Get()
@@ -84,7 +85,7 @@ class UserAdminCmds(Cmd, CoreGlobal):
     def do_demote(self, args):
         try:
             doParser = self.arg_demote()
-            doArgs = doParser.parse_args(args.split())
+            doArgs = doParser.parse_args(shlex.split(args))
             orgSpecified = org_utils.org_get(api=self.api, name=doArgs.org)
 
             adminUser = self.api.Users(doArgs.account).Get()

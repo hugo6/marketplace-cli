@@ -10,6 +10,7 @@ from marketplacecli.utils import marketplace_utils
 from marketplace.objects.marketplace import *
 from user_admin_cmds import UserAdminCmds
 from user_role_cmds import UserRoleCmds
+import shlex
 
 
 class UserCmds(Cmd, CoreGlobal):
@@ -81,7 +82,7 @@ class UserCmds(Cmd, CoreGlobal):
             # add arguments
             do_parser = self.arg_create()
             try:
-                do_args = do_parser.parse_args(args.split())
+                do_args = do_parser.parse_args(shlex.split(args))
             except SystemExit as e:
                 return
 
@@ -175,7 +176,7 @@ class UserCmds(Cmd, CoreGlobal):
     def do_enable(self, args):
         try:
             doParser = self.arg_enable()
-            doArgs = doParser.parse_args(args.split())
+            doArgs = doParser.parse_args(shlex.split(args))
 
             printer.out("Enabling user [" + doArgs.account + "] ...")
             user = self.api.Users(doArgs.account).Get()
@@ -222,7 +223,7 @@ class UserCmds(Cmd, CoreGlobal):
     def do_disable(self, args):
         try:
             doParser = self.arg_disable()
-            doArgs = doParser.parse_args(args.split())
+            doArgs = doParser.parse_args(shlex.split(args))
 
             printer.out("Disabling user [" + doArgs.account + "] ...")
             user = self.api.Users(doArgs.account).Get()
