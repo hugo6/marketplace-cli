@@ -80,7 +80,7 @@ class SubscriptionProfileAdmins(Cmd, CoreGlobal):
 
     def arg_remove(self):
         do_parser = ArgumentParser(prog=self.cmd_name + " remove", add_help=True,
-                                   description="Remove one or more entitlements to a role within the specified organization")
+                                   description="Remove a user as an administrator of subscription profiles")
         mandatory = do_parser.add_argument_group("mandatory arguments")
         mandatory.add_argument('--name', dest='name', required=True, help="the name of the subscription profile")
         mandatory.add_argument('--admins', dest='admins', nargs='+', required=True,

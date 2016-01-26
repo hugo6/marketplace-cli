@@ -130,7 +130,7 @@ class UserRoleCmds(Cmd, CoreGlobal):
 
     def arg_remove(self):
         do_parser = ArgumentParser(prog=self.cmd_name + " remove", add_help=True,
-                                   description="Remove one or more entitlements to a role within the specified organization")
+                                   description="Remove one or more roles from the user")
         mandatory = do_parser.add_argument_group("mandatory arguments")
         mandatory.add_argument('--account', dest='account', required=True,
                                help="user name of the account for which the current command should be executed")
