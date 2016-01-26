@@ -1,5 +1,5 @@
 __author__ = "UShareSoft"
 
-VERSION = "0.5"
+VERSION = "3.1.0"
 
 HTTP_TIMEOUT = 10

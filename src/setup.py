@@ -6,7 +6,7 @@ from setuptools import setup, find_packages
 from marketplacecli.utils.constants import *
 
 # Declare your packages' dependencies here, for eg:
-requires = ['uforge-marketplace_python_sdk>=3.0, <3.1',
+requires = ['uforge-marketplace_python_sdk>=3.1',
             'httplib2==0.9',
             'cmd2==0.6.7',
             'texttable>=0.8.1',
