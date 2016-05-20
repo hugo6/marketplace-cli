@@ -106,8 +106,13 @@ class UserCmds(Cmd, CoreGlobal):
             else:
                 new_user.active = True
 
+            if do_args.accountPassword:
+                auto_password = "false"
+            else:
+                auto_password = "true"
+
             # Send the create user request to the server
-            new_user = self.api.Users(self.login).Create("true", "true", org, "false", "false", "false", new_user)
+            new_user = self.api.Users(self.login).Create("true", "true", org, "false", "false", auto_password, new_user)
 
             if new_user is None:
                 printer.out("No information about new user available", printer.ERROR)
