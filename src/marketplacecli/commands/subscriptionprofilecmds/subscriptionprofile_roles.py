@@ -108,10 +108,10 @@ class SubscriptionProfileRoles(Cmd, CoreGlobal):
             all_roles.roles = pyxb.BIND()
 
             # Copy the list of current roles - Remove the roles selected in args
-            for role in subscription.roles.role:
-                if role.name not in do_args.roles:
+            for r in subscription.roles.role:
+                if r.name not in do_args.roles:
                     already_role = role()
-                    already_role.name = role.name
+                    already_role.name = r.name
                     all_roles.roles.append(already_role)
 
             # call UForge API
