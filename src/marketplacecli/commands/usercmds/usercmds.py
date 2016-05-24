@@ -151,8 +151,12 @@ class UserCmds(Cmd, CoreGlobal):
                 table.header(
                     ["Login", "Email", "Lastname", "Firstname", "Created", "Active", "Promo Code", "Creation Code"])
                 for u in users.users.user:
+                    if u.active:
+                        active = "X"
+                    else:
+                        active = ""
                     table.add_row([u.loginName, u.email, u.surname, u.firstName,
-                                   u.created.strftime("%Y-%m-%d %H:%M:%S"), "X", u.promoCode, u.creationCode])
+                                   u.created.strftime("%Y-%m-%d %H:%M:%S"), active, u.promoCode, u.creationCode])
                 print table.draw() + "\n"
             return 0
         except ArgumentParserError as e:
