@@ -1,7 +1,7 @@
 import os
 import sys
 
-from setuptools import setup, find_packages
+from setuptools import setup, find_packages,Command
 
 from marketplacecli.utils.constants import *
 
@@ -25,6 +25,16 @@ if os.name != "nt":
         requires.append('readline')
 else:  # On Windows
     requires.append('pyreadline==2.0')
+
+class CleanCommand(Command):
+    """Custom clean command to tidy up the project root."""
+    user_options = []
+    def initialize_options(self):
+        pass
+    def finalize_options(self):
+        pass
+    def run(self):
+        os.system('rm -vrf ./build ./dist ./*.pyc ./*.egg-info | find -iname "*.pyc" -exec rm {} +')
 
 setup(
 
@@ -55,6 +65,11 @@ setup(
         'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
     ),
+
+    # ... custom build command
+    cmdclass={
+        'clean': CleanCommand,
+    },
 
     # long_description= 'Long description of the package',
     scripts=['bin/marketplacecli', 'bin/marketplacecli.bat'],
